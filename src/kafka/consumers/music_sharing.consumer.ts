@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ConsumerService } from '../consumer.service';
+import { ConsumerService } from '../kafka.service';
 import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class MusicSharingConsumer implements OnModuleInit {
           },
           data: { music_sharing_count: { increment: 1 } },
         });
-        throw new Error('Une erreur est survenue !');
+        console.log('Une erreur est survenue !');
       },
     });
   }

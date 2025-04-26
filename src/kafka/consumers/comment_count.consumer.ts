@@ -12,7 +12,7 @@ export class CommentConsumer implements OnModuleInit {
   async onModuleInit() {
     await this.consumerService.consume({
       topic: { topic: 'new_comment' },
-      config: { groupId: 'badge-consumer' },
+      config: { groupId: 'comment-group' },
       onMessage: async (message: any) => {
         try {
           const data = JSON.parse(message.value?.toString());
@@ -24,7 +24,7 @@ export class CommentConsumer implements OnModuleInit {
             data: { comment_count: { increment: 1 } },
           });
         } catch (error) {
-          throw new Error('Une erreur est survenue !');
+          console.log('Une erreur est survenue !');
         }
       },
     });

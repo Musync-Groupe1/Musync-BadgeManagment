@@ -9,15 +9,15 @@ import { PlaylistSharingConsumer } from './consumers/playlist_shaing.consumer';
   providers: [
     ConsumerService,
     CommentConsumer,
-    //MusicSharingConsumer,
-    //PlaylistSharingConsumer,
+    MusicSharingConsumer,
+    PlaylistSharingConsumer,
   ],
 
   exports: [
     ConsumerService,
     CommentConsumer,
-    //MusicSharingConsumer,
-    //PlaylistSharingConsumer,
+    MusicSharingConsumer,
+    PlaylistSharingConsumer,
   ],
 })
 export class KafkaModule {}

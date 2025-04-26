@@ -12,16 +12,19 @@ export class PlaylistSharingConsumer implements OnModuleInit {
   async onModuleInit() {
     await this.consumerService.consume({
       topic: { topic: 'playlist_sharing' },
-      config: { groupId: 'badge-consumer' },
+      config: { groupId: 'playlist-group' },
       onMessage: async (message: any) => {
-        const data = JSON.parse(message.value?.toString());
-        await this.prisma.user.update({
-          where: {
-            user_id: data.user_id,
-          },
-          data: { playlist_sharing_count: { increment: 1 } },
-        });
-        console.log('Une erreur est survenue !');
+        try {
+          const data = JSON.parse(message.value?.toString());
+          await this.prisma.user.update({
+            where: {
+              user_id: data.user_id,
+            },
+            data: { playlist_sharing_count: { increment: 1 } },
+          });
+        } catch (error) {
+          console.log('Une erreur est survenue !');
+        }
       },
     });
   }

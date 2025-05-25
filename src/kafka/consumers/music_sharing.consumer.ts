@@ -2,6 +2,10 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConsumerService } from '../kafka.service';
 import { PrismaService } from 'prisma/prisma.service';
 
+interface CommentMessage {
+  user_id: number;
+}
+
 @Injectable()
 export class MusicSharingConsumer implements OnModuleInit {
   constructor(
@@ -15,7 +19,7 @@ export class MusicSharingConsumer implements OnModuleInit {
       config: { groupId: 'music-group' },
       onMessage: async (message: any) => {
         try {
-          const data = JSON.parse(message.value?.toString());
+          const data = JSON.parse(message.value?.toString()) as CommentMessage;
           await this.prisma.user.update({
             where: {
               user_id: data.user_id,
@@ -23,7 +27,7 @@ export class MusicSharingConsumer implements OnModuleInit {
             data: { music_sharing_count: { increment: 1 } },
           });
         } catch (error) {
-          console.log('Une erreur est survenue !');
+          console.log('Une erreur est survenue !', error);
         }
       },
     });

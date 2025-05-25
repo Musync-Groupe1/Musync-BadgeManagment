@@ -9,7 +9,12 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  async addUser(user) {
+  async addUser(user: {
+    is_certified: boolean;
+    music_sharing_count: number;
+    playlist_sharing_count: number;
+    comment_count: number;
+  }) {
     return this.prisma.user.create({
       data: {
         is_certified: user.is_certified,

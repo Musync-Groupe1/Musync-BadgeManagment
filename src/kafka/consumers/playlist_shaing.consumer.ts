@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConsumerService } from '../kafka.service';
 import { PrismaService } from 'prisma/prisma.service';
+import { KafkaMessage } from 'kafkajs';
 
 interface CommentMessage {
   user_id: number;
@@ -17,9 +18,11 @@ export class PlaylistSharingConsumer implements OnModuleInit {
     await this.consumerService.consume({
       topic: { topic: 'playlist_sharing' },
       config: { groupId: 'playlist-group' },
-      onMessage: async (message: any) => {
+      onMessage: async (message: KafkaMessage) => {
         try {
-          const data = JSON.parse(message.value?.toString()) as CommentMessage;
+          const data = JSON.parse(
+            message.value?.toString() ?? '',
+          ) as CommentMessage;
           await this.prisma.user.update({
             where: {
               user_id: data.user_id,

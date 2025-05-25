@@ -90,7 +90,7 @@
 // }
 
 import { Injectable } from '@nestjs/common';
-import { Kafka, Consumer, ConsumerRunConfig } from 'kafkajs';
+import { Kafka, Consumer, ConsumerRunConfig, KafkaMessage } from 'kafkajs';
 
 @Injectable()
 export class ConsumerService {
@@ -111,7 +111,8 @@ export class ConsumerService {
   }: {
     topic: { topic: string };
     config: { groupId: string };
-    onMessage: Function;
+    //onMessage: Function;
+    onMessage: (message: KafkaMessage) => Promise<void>;
   }) {
     const consumer = this.kafka.consumer({ groupId: config.groupId });
 
@@ -119,8 +120,8 @@ export class ConsumerService {
     await consumer.subscribe({ topic: topic.topic, fromBeginning: true });
 
     const runConfig: ConsumerRunConfig = {
-      eachMessage: async ({ topic, partition, message }) => {
-        onMessage(message);
+      eachMessage: async ({ message }) => {
+        await onMessage(message);
       },
     };
 

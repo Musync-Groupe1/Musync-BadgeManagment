@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  Post,
-  Body,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Delete, Get, Post, Body, Param } from '@nestjs/common';
 import { BadgeService } from '../services/badgeService';
 
-import { AuthGuard, RoleMatchingMode, Roles } from 'nest-keycloak-connect';
+import { Roles } from 'nest-keycloak-connect';
 
 @Controller('badges')
 //@UseGuards(AuthGuard)

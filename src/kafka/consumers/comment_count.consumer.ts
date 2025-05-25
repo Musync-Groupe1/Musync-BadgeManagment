@@ -2,6 +2,10 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConsumerService } from '../kafka.service';
 import { PrismaService } from 'prisma/prisma.service';
 
+interface CommentMessage {
+  user_id: number;
+}
+
 @Injectable()
 export class CommentConsumer implements OnModuleInit {
   constructor(
@@ -15,7 +19,7 @@ export class CommentConsumer implements OnModuleInit {
       config: { groupId: 'comment-group' },
       onMessage: async (message: any) => {
         try {
-          const data = JSON.parse(message.value?.toString());
+          const data = JSON.parse(message.value?.toString()) as CommentMessage;
           console.log('Received Kafka message:', data);
           await this.prisma.user.update({
             where: {
@@ -24,7 +28,7 @@ export class CommentConsumer implements OnModuleInit {
             data: { comment_count: { increment: 1 } },
           });
         } catch (error) {
-          console.log('Une erreur est survenue !');
+          console.log('Une erreur est survenue !', error);
         }
       },
     });

@@ -35,3 +35,4 @@ jobs:
             -Dsonar.projectKey=Musync-BadgeManagement \
             -Dsonar.organization=Musync-Groupe1 \
             -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.host.url=https://sonarcloud.io \
